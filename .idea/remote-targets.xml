@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteTargetsManager">
+    <targets>
+      <target name="root@110.40.150.61:22" type="ssh/sftp">
+        <config>
+          <option name="projectRootOnTarget" value="/root/mxshop_srvs" />
+          <option name="serverName" value="root@110.40.150.61:22 key" />
+          <option name="useRsync" value="true" />
+        </config>
+        <ContributedStateBase type="GoLanguageRuntime">
+          <config>
+            <option name="goPath" value="/data/project/go" />
+            <option name="goRoot" value="/usr/local/go/bin" />
+          </config>
+        </ContributedStateBase>
+      </target>
+    </targets>
+  </component>
+</project>
