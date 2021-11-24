@@ -3,12 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/hashicorp/consul/api"
-	"github.com/satori/go.uuid"
-	"go.uber.org/zap"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/health"
-	"google.golang.org/grpc/health/grpc_health_v1"
 	"mxshop_srvs/user_srv/global"
 	"mxshop_srvs/user_srv/handler"
 	"mxshop_srvs/user_srv/initialize"
@@ -17,12 +11,19 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/hashicorp/consul/api"
+	uuid "github.com/satori/go.uuid"
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/health"
+	"google.golang.org/grpc/health/grpc_health_v1"
+
 	"net"
 )
 
 func main() {
 	IP := flag.String("i", "127.0.0.1", "ip地址")
-	Port := flag.Int("p", 50051, "端口号")
+	Port := flag.Int("p", 50000, "端口号")
 	Env := flag.String("e", "dev", "运行环境")
 
 	initialize.InitLogger()
@@ -58,7 +59,8 @@ func main() {
 		GRPC:                           fmt.Sprintf("%s:%d", *IP, *Port),
 		Timeout:                        "5s",
 		Interval:                       "5s",
-		DeregisterCriticalServiceAfter: "15s",
+		DeregisterCriticalServiceAfter: "15s",     // 15s 服务不可达时，注销服务
+		Status:                         "passing", // 服务启动时，默认正常
 	}
 
 	// 生成注册对象

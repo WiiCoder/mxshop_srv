@@ -1,8 +1,8 @@
 name: 'user_srv'
 mysql:
-  host: '127.0.0.1'
+  host: '110.40.150.61'
   port: 3306
-  name: 'shop-srv-user'
+  name: 'shop_user_srv'
   user: 'root'
   password: 'fshing'
 consul:

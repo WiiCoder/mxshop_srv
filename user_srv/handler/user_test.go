@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"mxshop_srvs/user_srv/initialize"
 	"mxshop_srvs/user_srv/proto"
 	"testing"
 )
@@ -34,6 +35,10 @@ func TestUserServer_CreteUser(t *testing.T) {
 }
 
 func TestUserServer_GetUserList(t *testing.T) {
+	initialize.InitLogger()
+	initialize.InitConfig("dev")
+	initialize.InitDB()
+
 	ctx := context.Background()
 	s := &UserServer{}
 
