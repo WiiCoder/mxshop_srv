@@ -6,7 +6,7 @@ mysql:
   user: 'root'
   password: 'fshing'
 consul:
-  host: '127.0.0.1'
+  host: '110.40.150.61'
   port: 8500
 
 # nacos

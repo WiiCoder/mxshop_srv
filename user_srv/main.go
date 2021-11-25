@@ -22,7 +22,9 @@ import (
 )
 
 func main() {
-	IP := flag.String("i", "127.0.0.1", "ip地址")
+	// 健康检查失败为 IP 无法连接导致的
+	// 此处 IP 为内网 IP
+	IP := flag.String("i", "10.0.16.4", "ip地址")
 	Port := flag.Int("p", 50000, "端口号")
 	Env := flag.String("e", "dev", "运行环境")
 
@@ -44,7 +46,9 @@ func main() {
 	}
 
 	// 注册服务健康检查
-	grpc_health_v1.RegisterHealthServer(server, health.NewServer())
+	healthServer := health.NewServer()
+	healthServer.SetServingStatus("user_srv", grpc_health_v1.HealthCheckResponse_SERVING)
+	grpc_health_v1.RegisterHealthServer(server, healthServer)
 
 	//服务注册
 	cfg := api.DefaultConfig()
@@ -52,7 +56,9 @@ func main() {
 		global.ServerConfig.ConsulInfo.Port)
 
 	client, err := api.NewClient(cfg)
-	logPanic(err)
+	if err != nil {
+		zap.S().Panic(err)
+	}
 
 	// 生成健康检查对象
 	check := &api.AgentServiceCheck{
@@ -75,7 +81,9 @@ func main() {
 	}
 
 	err = client.Agent().ServiceRegister(registration)
-	logPanic(err)
+	if err != nil {
+		zap.S().Panic(err)
+	}
 
 	go func() {
 		err = server.Serve(listen)
@@ -94,10 +102,4 @@ func main() {
 	}
 	zap.S().Infof("[consul] 注销成功: %s", serviceID)
 
-}
-
-func logPanic(err error) {
-	if err != nil {
-		zap.S().Panic(err)
-	}
 }
